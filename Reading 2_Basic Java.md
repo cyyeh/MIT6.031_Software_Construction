@@ -17,7 +17,7 @@ reference:
     - Primitive Types and Reference Types
     - Numeric Data Types
     - Strings and Characters
-    - String Concatenation
+    - String Concatenationㄥ
     - Type Conversions
     - Arithmetic and Math Functions
     - Comparisons
