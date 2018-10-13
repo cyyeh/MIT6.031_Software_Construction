@@ -64,19 +64,15 @@ But on the whole, Java is a reasonable choice of language right now to learn how
 
 ### Problem Sets (These are personal programming projects)
 
-0: Turtle Graphics (http://web.mit.edu/6.031/www/sp18/psets/ps0/)
-
-1: Around the World (http://web.mit.edu/6.031/www/sp18/psets/ps1/)
-
-2: Multi-Startup Set (http://web.mit.edu/6.031/www/sp18/psets/ps2/)
-
-3: Memely (http://web.mit.edu/6.031/www/sp18/psets/ps3/)
-
-4: Memory Scramble (http://web.mit.edu/6.031/www/sp18/psets/ps4/)
+* 0: Turtle Graphics (https://ocw.mit.edu/ans7870/6/6.005/s16/psets/ps0/)
+* 1: Tweet Tweet (https://ocw.mit.edu/ans7870/6/6.005/s16/psets/ps1/)
+* 2: Poetic Walks (https://ocw.mit.edu/ans7870/6/6.005/s16/psets/ps2/)
+* 3: Expressivo (https://ocw.mit.edu/ans7870/6/6.005/s16/psets/ps3/)
+* 4: Multiplayer Minesweeper (https://ocw.mit.edu/ans7870/6/6.005/s16/psets/ps4/)
 
 Project (This is a team based project)
 
-* Karaoke (http://web.mit.edu/6.031/www/sp18/projects/karaoke/)
+* ABC Music Player(https://ocw.mit.edu/ans7870/6/6.005/s16/projects/abcplayer/)
 
 ### Quizzes (For testing how well you understand the course material)
 
