@@ -22,7 +22,7 @@ public class ExtractTest {
     private static final Tweet tweet2 = new Tweet(2, "bbitdiddle", "rivest talk in 30 minutes #hype", d2);
     private static final Tweet tweet3 = new Tweet(3, "jimmy", "hello world chihyu.jimmy@gmail.com", d3);
     private static final Tweet tweet4 = new Tweet(4, "jam", "hello @jimmy", d3);
-    private static final Tweet tweet5 = new Tweet(5, "jerry", "hello @jerry", d3);
+    private static final Tweet tweet5 = new Tweet(5, "jerry", "hello @JERRY", d3);
     
     /*
     @Test(expected=AssertionError.class)
@@ -63,6 +63,7 @@ public class ExtractTest {
 	 * 3. [v] username-mention in tweet messages [v] legal [x] belong to any author in tweets
 	 * 4. [v] username-mention in tweet messages [v] legal [v] belong to any author in tweets(author himself)
 	 * 5. [v] username-mention in tweet messages [v] legal [v] belong to any author in tweets(other)
+	 * 6. [v] username-mention in tweet messages [v] legal [v] belong to any author in tweets(username-mention in uppercase)
 	 */
     
     // covers [x] username-mention in tweet messages
@@ -105,6 +106,13 @@ public class ExtractTest {
         assertTrue("expected non empty set", !mentionedUsers.isEmpty());    	
     }
     
+    // [v] username-mention in tweet messages [v] legal [v] belong to any author in tweets(username-mention in uppercase)
+    @Test
+    public void testGetMentionedUserAuthorsWithUppercase() {
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet4, tweet5));
+        
+        assertTrue("expected non empty set", !mentionedUsers.isEmpty());
+    }
 
     /*
      * Warning: all the tests you write here must be runnable against any

@@ -62,7 +62,7 @@ public class Extract {
       
         // add authors to a set for further searching usage
         for (int i = 0; i < tweets.size(); i++) {
-          userNames.add(tweets.get(i).getAuthor());
+          userNames.add(tweets.get(i).getAuthor().toLowerCase());
         }
         
         // search for tweets and collect all mentioned users
@@ -86,8 +86,13 @@ public class Extract {
     	return mensionedUsers;
     }
     
+    /**
+     * get twitter username from username-mention(@)
+     * @param userNameMention, a valid twitter username starting with @
+     * @return a lower-case username
+     */
     private static String getUserNameFromUserNameMention(String userNameMention) {
-        return userNameMention.substring(1);
+        return userNameMention.substring(1).toLowerCase();
     }
 
 }
