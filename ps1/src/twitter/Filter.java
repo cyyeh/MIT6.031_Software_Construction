@@ -3,7 +3,16 @@
  */
 package twitter;
 
+import java.sql.Time;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import org.omg.CORBA.PRIVATE_MEMBER;
 
 /**
  * Filter consists of methods that filter a list of tweets for those matching a
@@ -27,7 +36,18 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> writtenBy(List<Tweet> tweets, String username) {
-        throw new RuntimeException("not implemented");
+        final String regexUsername = "^(\\w){1,15}$";
+        
+        if (!username.matches(regexUsername)) {
+        	throw new RuntimeException("non-valid Twitter username");
+        }
+        
+        // reference: https://stackoverflow.com/a/18508956
+        // use functional programming techniques
+        return tweets
+        		.stream()
+        		.filter(tweet -> tweet.getAuthor() == username)
+        		.collect(Collectors.toList());
     }
 
     /**
@@ -40,10 +60,39 @@ public class Filter {
      * @return all and only the tweets in the list that were sent during the timespan,
      *         in the same order as in the input list.
      */
-    public static List<Tweet> inTimespan(List<Tweet> tweets, Timespan timespan) {
-        throw new RuntimeException("not implemented");
+    public static List<Tweet> inTimespan(List<Tweet> tweets, Timespan timespan) {	
+        return tweets
+        		.stream()
+        		.filter(tweet -> checkIfTweetInTimeSpan(tweet, timespan))
+        		.collect(Collectors.toList());
     }
 
+    /**
+     * Check if tweet is within given timespan(start/end endpoint included)
+     * @param tweet
+     * @param timespan
+     * @return boolean, true if tweet is within given timespan, and vice versa
+     */
+    private static Boolean checkIfTweetInTimeSpan(Tweet tweet, Timespan timespan) {
+    	final Instant tweetTimeStamp = tweet.getTimestamp();
+    	final Instant timespanStart = timespan.getStart();
+    	final Instant timespanEnd = timespan.getEnd();
+    	Boolean result;
+    	
+    	if (tweetTimeStamp.compareTo(timespanStart) > 0 && tweetTimeStamp.compareTo(timespanEnd) < 0) {
+        	// tweetTimeStamp is within timespan
+    		result = true;
+    	} else if (tweetTimeStamp.equals(timespanStart) || tweetTimeStamp.equals(timespanEnd)) {
+    		// tweetTimeStamp may be at timespan start or timespan end
+    		result = true;
+    	} else {
+    		// tweetTimeStamp is not within timespan
+    		result = false;
+    	}
+    	
+    	return result;
+    }
+    
     /**
      * Find tweets that contain certain words.
      * 
@@ -60,7 +109,37 @@ public class Filter {
      *         same order as in the input list.
      */
     public static List<Tweet> containing(List<Tweet> tweets, List<String> words) {
-        throw new RuntimeException("not implemented");
+        Set<String> textSet = new HashSet<>();
+        
+        // transfer words into set for further comparison usage
+        for (String word : words) {
+        	textSet.add(word.toLowerCase());
+        }
+        
+        return tweets
+        		.stream()
+        		.filter(tweet -> checkIfTweetContainsText(tweet, textSet))
+        		.collect(Collectors.toList());
     }
-
+    
+    /**
+     * check if tweet message contains text in given textSet
+     * @param tweet
+     * @param textSet
+     * @return boolean, true if tweet message contains text in given textSet, and vice versa
+     */
+    private static Boolean checkIfTweetContainsText(Tweet tweet, Set<String> textSet) {
+    	Boolean result = false;
+    	final String tweetMessage = tweet.getText().toLowerCase();
+    	final String[] tweetMessageWordArray = tweetMessage.split(" ");
+    	
+    	for (String tweetMessageWord : tweetMessageWordArray) {
+    		if (textSet.contains(tweetMessageWord)) {
+    			result = true;
+    			break;
+    		}
+    	}
+    	
+    	return result;
+    }
 }
