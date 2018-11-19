@@ -20,9 +20,12 @@ public class TurtleSoup {
      * @param sideLength length of each side
      */
     public static void drawSquare(Turtle turtle, int sideLength) {
-    	for (int i = 0; i < 4; i++) {
+    	final int squareSides = 4;
+    	final double squareAngle = 90.0;
+    	
+    	for (int i = 0; i < squareSides; i++) {
             turtle.forward(sideLength);
-            turtle.turn(90.0);    	
+            turtle.turn(squareAngle);    	
     	}
     }
 
@@ -36,6 +39,10 @@ public class TurtleSoup {
      * @return angle in degrees, where 0 <= angle < 360
      */
     public static double calculateRegularPolygonAngle(int sides) {
+    	if (sides <= 2) {
+    		throw new RuntimeException("sides must be > 2");
+    	}
+    	
         return (sides - 2) * 180.0 / sides;
     }
 
@@ -50,6 +57,10 @@ public class TurtleSoup {
      * @return the integer number of sides
      */
     public static int calculatePolygonSidesFromAngle(double angle) {
+    	if (angle <= 0 || angle >= 180) {
+    		throw new RuntimeException("0 < angle < 180");
+    	}
+    	
         return (int) Math.round(360 / (180 - angle));
     }
 
@@ -63,11 +74,12 @@ public class TurtleSoup {
      * @param sideLength length of each side
      */
     public static void drawRegularPolygon(Turtle turtle, int sides, int sideLength) {
-    	double angle = calculateRegularPolygonAngle(sides); // inside angles
+    	final double insideAngle = calculateRegularPolygonAngle(sides); // inside angles
+    	final double outsideAngle = 180 - insideAngle;
     	
         for (int i = 0; i < sides; i++) {
         	turtle.forward(sideLength);
-        	turtle.turn(180 - angle); // outside angles
+        	turtle.turn(outsideAngle); // outside angles
         }
     }
 
@@ -145,7 +157,13 @@ public class TurtleSoup {
     	drawKochCurve(turtle, 10, 3);
     }
 
-    public static void drawKochCurve(Turtle turtle, int step, int number) {
+    /**
+     * Draw KochCurve referenced from https://en.wikipedia.org/wiki/Koch_snowflake
+     * @param turtle, turtle object
+     * @param step, length of each side
+     * @param number, number of KochCurve in each side
+     */
+    private static void drawKochCurve(Turtle turtle, int step, int number) {
         if (number == 0) {
         	PenColor[] penColors =  PenColor.values();
         	turtle.color(penColors[(int) Math.floor(Math.random() * penColors.length)]);
@@ -172,7 +190,7 @@ public class TurtleSoup {
         DrawableTurtle turtle = new DrawableTurtle();
 
         drawPersonalArt(turtle);
-        
+                
         // draw the window
         turtle.draw();
     }
