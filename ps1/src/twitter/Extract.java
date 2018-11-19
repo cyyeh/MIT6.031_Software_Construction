@@ -53,34 +53,41 @@ public class Extract {
     public static Set<String> getMentionedUsers(List<Tweet> tweets) {
     	// regular expression for twitter usernames
     	// reference: https://help.twitter.com/en/managing-your-account/twitter-username-rules
-    	final String regexUsernameMention = "^@(\\w){1,15}$";
-    	final Set<String> userNames = new HashSet<>();
-    	Set<String> mensionedUsers = new HashSet<>();
-    	String[] tweetMessageWordArray;
-    	int tweetMessageWordArrayLength;
-    
-    	// add authors to a set for further searching usage
-    	for (int i = 0; i < tweets.size(); i++) {
-    		userNames.add(tweets.get(i).getAuthor());
-    	}
-    	
-    	// search for tweets and collect all mentioned users
-    	for (int i = 0; i < tweets.size(); i++) {
-    		tweetMessageWordArray = tweets.get(i).getText().split(" ");
-    		tweetMessageWordArrayLength = tweetMessageWordArray.length;
-    		
-    		if (tweetMessageWordArrayLength > 0) {
-    			for (int j = 0; j < tweetMessageWordArrayLength; j++) {
-    				// check if username-mention is legal and belongs to userNames
-    				if (tweetMessageWordArray[j].matches(regexUsernameMention) && 
-    					userNames.contains(tweetMessageWordArray[j])) {
-    					mensionedUsers.add(tweetMessageWordArray[j]);
-    				}
-    			}
-    		}
-    	}
+        final String regexUsernameMention = "^@(\\w){1,15}$";
+        final Set<String> userNames = new HashSet<>();
+        String userName;
+        Set<String> mensionedUsers = new HashSet<>();
+        String[] tweetMessageWordArray;
+        int tweetMessageWordArrayLength;
+      
+        // add authors to a set for further searching usage
+        for (int i = 0; i < tweets.size(); i++) {
+          userNames.add(tweets.get(i).getAuthor());
+        }
+        
+        // search for tweets and collect all mentioned users
+        for (int i = 0; i < tweets.size(); i++) {
+          tweetMessageWordArray = tweets.get(i).getText().split(" ");
+          tweetMessageWordArrayLength = tweetMessageWordArray.length;
+          
+          if (tweetMessageWordArrayLength > 0) {
+            for (int j = 0; j < tweetMessageWordArrayLength; j++) {
+              // check if username-mention is legal and belongs to userNames
+              if (tweetMessageWordArray[j].matches(regexUsernameMention)) {
+                userName = getUserNameFromUserNameMention(tweetMessageWordArray[j]);
+                if (userNames.contains(userName)) {
+                  mensionedUsers.add(userName);
+                }
+              }
+            }
+          }
+        }
     	
     	return mensionedUsers;
+    }
+    
+    private static String getUserNameFromUserNameMention(String userNameMention) {
+        return userNameMention.substring(1);
     }
 
 }

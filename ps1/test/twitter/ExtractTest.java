@@ -94,7 +94,7 @@ public class ExtractTest {
     public void testGetMentionedUserAuthorsHimSelf() {
         Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet5));
         
-        assertFalse("expected non empty set", !mentionedUsers.isEmpty());    	
+        assertTrue("expected non empty set", !mentionedUsers.isEmpty());    	
     }
     
     // [v] username-mention in tweet messages [v] legal [v] belong to any author in tweets(other)
@@ -102,7 +102,7 @@ public class ExtractTest {
     public void testGetMentionedUserAuthorsOthers() {
         Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet3, tweet4));
         
-        assertFalse("expected non empty set", !mentionedUsers.isEmpty());    	
+        assertTrue("expected non empty set", !mentionedUsers.isEmpty());    	
     }
     
 
