@@ -46,7 +46,7 @@ public class Filter {
         // use functional programming techniques
         return tweets
         		.stream()
-        		.filter(tweet -> tweet.getAuthor() == username)
+        		.filter(tweet -> tweet.getAuthor().equals(username.toLowerCase()))
         		.collect(Collectors.toList());
     }
 

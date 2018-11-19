@@ -60,7 +60,7 @@ public class ExtractTest {
 	 * Partition the inputs as follows:
 	 * 1. [x] username-mention in tweet messages
 	 * 2. [v] username-mention in tweet messages [x] legal
-	 * 3. [v] username-mention in tweet messages [v] legal [x] belong to any author in tweets
+	 * 3. [v] username-mention in tweet messages [v] legal [v] not belong to any author in tweets
 	 * 4. [v] username-mention in tweet messages [v] legal [v] belong to any author in tweets(author himself)
 	 * 5. [v] username-mention in tweet messages [v] legal [v] belong to any author in tweets(other)
 	 * 6. [v] username-mention in tweet messages [v] legal [v] belong to any author in tweets(username-mention in uppercase)
@@ -82,12 +82,12 @@ public class ExtractTest {
         assertTrue("expected empty set", mentionedUsers.isEmpty());
     }
     
-    // covers [v] username-mention in tweet messages [v] legal [x] belong to any author in tweets
+    // covers [v] username-mention in tweet messages [v] legal [v] not belong to any author in tweets
     @Test
     public void testGetMentionedUserNoAuthorsIncluded() {
         Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet4));
         
-        assertTrue("expected empty set", mentionedUsers.isEmpty());
+        assertTrue("expected non empty set", !mentionedUsers.isEmpty());
     }
     
     // [v] username-mention in tweet messages [v] legal [v] belong to any author in tweets(authors himself)

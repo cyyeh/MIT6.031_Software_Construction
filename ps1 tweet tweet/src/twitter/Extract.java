@@ -58,29 +58,23 @@ public class Extract {
         String userName;
         Set<String> mensionedUsers = new HashSet<>();
         String[] tweetMessageWordArray;
-        int tweetMessageWordArrayLength;
       
         // add authors to a set for further searching usage
-        for (int i = 0; i < tweets.size(); i++) {
-          userNames.add(tweets.get(i).getAuthor().toLowerCase());
+        for (Tweet tweet : tweets) {
+        	userNames.add(tweet.getAuthor().toLowerCase());
         }
         
         // search for tweets and collect all mentioned users
-        for (int i = 0; i < tweets.size(); i++) {
-          tweetMessageWordArray = tweets.get(i).getText().split(" ");
-          tweetMessageWordArrayLength = tweetMessageWordArray.length;
-          
-          if (tweetMessageWordArrayLength > 0) {
-            for (int j = 0; j < tweetMessageWordArrayLength; j++) {
-              // check if username-mention is legal and belongs to userNames
-              if (tweetMessageWordArray[j].matches(regexUsernameMention)) {
-                userName = getUserNameFromUserNameMention(tweetMessageWordArray[j]);
-                if (userNames.contains(userName)) {
-                  mensionedUsers.add(userName);
-                }
-              }
-            }
-          }
+        for (Tweet tweet : tweets) {
+        	tweetMessageWordArray = tweet.getText().split(" ");
+        
+        	for (String tweetMessageWord : tweetMessageWordArray) {
+        		// check if username-mention is legal
+        		if (tweetMessageWord.matches(regexUsernameMention)) {
+    				userName = getUserNameFromUserNameMention(tweetMessageWord);
+    				mensionedUsers.add(userName);
+        		}
+		    }
         }
     	
     	return mensionedUsers;

@@ -3,9 +3,20 @@
  */
 package twitter;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+
+import org.omg.PortableInterceptor.USER_EXCEPTION;
+
+import twitter.Filter;
+import twitter.Extract;
 
 /**
  * SocialNetwork provides methods that operate on a social network.
@@ -41,7 +52,30 @@ public class SocialNetwork {
      *         either authors or @-mentions in the list of tweets.
      */
     public static Map<String, Set<String>> guessFollowsGraph(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+    	final Set<String> authors = new HashSet<>();
+    	List<Tweet> tweetsWithSameAuthor;
+    	Set<String> tweetfollowers;
+    	Map<String, Set<String>> followersGraph = new HashMap<>();
+    	
+    	for (Tweet tweet : tweets) {
+    		authors.add(tweet.getAuthor().toLowerCase());
+    	}
+    	    	
+    	for (String author : authors) {
+    		tweetsWithSameAuthor = Filter.writtenBy(tweets, author);
+    		tweetfollowers = Extract.getMentionedUsers(tweetsWithSameAuthor)
+    							.stream()
+    							.filter(userName -> !userName.equals(author))
+    							.collect(Collectors.toSet());
+    		
+    		if (!tweetfollowers.isEmpty()) {
+    			followersGraph.put(author, tweetfollowers);    			
+    		} else {
+    			followersGraph.put(author, new HashSet<>());
+    		}
+    	}
+    	
+    	return followersGraph;
     }
 
     /**
@@ -54,7 +88,30 @@ public class SocialNetwork {
      *         descending order of follower count.
      */
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
-        throw new RuntimeException("not implemented");
+        Map<String, Integer> influencingMap = new TreeMap<>();
+        
+        if (!followsGraph.isEmpty()) {
+        	// reference: https://stackoverflow.com/a/35558955
+        	followsGraph.forEach((user, followers) -> {
+        		followers.forEach(followee -> {
+        			if (influencingMap.containsKey(followee)) {
+        				influencingMap.put(followee, influencingMap.get(followee).intValue() + 1);
+        			} else {
+        				influencingMap.put(followee, 1);
+        			}
+        		});
+        		
+        		// put empty-follower users in map
+        		if (!influencingMap.containsKey(user)) {
+        			influencingMap.put(user, 0);
+        		}
+        	});
+        }
+        
+        return influencingMap.entrySet().stream()
+            	.sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+            	.map(user -> user.getKey())
+            	.collect(Collectors.toList());
     }
 
 }
