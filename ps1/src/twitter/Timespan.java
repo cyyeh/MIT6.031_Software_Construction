@@ -63,7 +63,7 @@ public class Timespan {
         if (!(thatObject instanceof Timespan)) {
             return false;
         }
-
+        
         Timespan that = (Timespan) thatObject;
         return this.start.equals(that.start) 
                 && this.end.equals(that.end);
