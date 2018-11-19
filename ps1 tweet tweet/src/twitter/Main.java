@@ -65,13 +65,11 @@ public class Main {
         System.err.println("follows graph has " + followsGraph.size() + " nodes");
         
         // print the top-N influencers
-        /*
         final int count = 10;
         final List<String> influencers = SocialNetwork.influencers(followsGraph);
         for (String username : influencers.subList(0, Math.min(count, influencers.size()))) {
             System.out.println(username);
         }
-        */
     }
     
 }
