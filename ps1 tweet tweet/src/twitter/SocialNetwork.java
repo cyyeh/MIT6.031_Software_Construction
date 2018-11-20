@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -88,6 +89,20 @@ public class SocialNetwork {
      *         descending order of follower count.
      */
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
+        Map<String, Integer> influencingMap = influencerScoreGraph(followsGraph);
+        
+        return influencingMap.entrySet().stream()
+            	.map(user -> user.getKey())
+            	.collect(Collectors.toList());
+    }
+    
+    
+    /**
+     * Transition from followsGraph to a influencerScoreGraph
+     * @param followsGraph
+     * @return a map with username as key, number of followers as value(influence) in descending order
+     */
+    private static Map<String, Integer> influencerScoreGraph(Map<String, Set<String>> followsGraph) {
         Map<String, Integer> influencingMap = new TreeMap<>();
         
         if (!followsGraph.isEmpty()) {
@@ -108,10 +123,12 @@ public class SocialNetwork {
         	});
         }
         
-        return influencingMap.entrySet().stream()
+        // since simply collect to map will lose order, thus we use linkedhashmap
+        // reference: http://www.java67.com/2017/07/how-to-sort-map-by-values-in-java-8.html
+        return	influencingMap.entrySet().stream()
             	.sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
-            	.map(user -> user.getKey())
-            	.collect(Collectors.toList());
+            	.collect(Collectors.toMap(Map.Entry::getKey, 
+                        Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
 }

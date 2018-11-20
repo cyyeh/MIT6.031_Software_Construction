@@ -53,7 +53,7 @@ public class Extract {
     public static Set<String> getMentionedUsers(List<Tweet> tweets) {
     	// regular expression for twitter usernames
     	// reference: https://help.twitter.com/en/managing-your-account/twitter-username-rules
-        final String regexUsernameMention = "^@(\\w){1,15}$";
+        final String regexUsernameMention = "^(\\W)*@(\\w){1,15}(\\W)*$";
         final Set<String> userNames = new HashSet<>();
         String userName;
         Set<String> mensionedUsers = new HashSet<>();
@@ -86,7 +86,17 @@ public class Extract {
      * @return a lower-case username
      */
     private static String getUserNameFromUserNameMention(String userNameMention) {
-        return userNameMention.substring(1).toLowerCase();
+    	final String regexNonWord = "[\\W]";
+    	final String[] filterResultArray = userNameMention.split(regexNonWord);
+    	String userName = "";
+    	
+    	for (String filterResult : filterResultArray) {
+    		if (!filterResult.isEmpty()) {
+    			userName = filterResult.toLowerCase();
+    			break;
+    		}
+    	}
+        return userName;
     }
 
 }
